@@ -1,0 +1,1167 @@
+import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+
+  await Hive.openBox('workoutBox');
+
+  runApp(const GymCompanionApp());
+}
+
+class GymCompanionApp extends StatelessWidget {
+  const GymCompanionApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Gym Companion',
+      theme: ThemeData.dark(),
+      home: const MainScreen(),
+    );
+  }
+}
+
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _screens = [
+    const HomeScreen(),
+    const WorkoutScreen(),
+    const NutritionScreen(),
+    const ProgressScreen(),
+    const SettingsScreen(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _screens[_selectedIndex],
+
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        selectedItemColor: Colors.greenAccent,
+        unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
+
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+
+          BottomNavigationBarItem(
+            icon: Icon(Icons.fitness_center),
+            label: 'Workouts',
+          ),
+
+          BottomNavigationBarItem(
+            icon: Icon(Icons.restaurant),
+            label: 'Nutrition',
+          ),
+
+          BottomNavigationBarItem(
+            icon: Icon(Icons.show_chart),
+            label: 'Progress',
+          ),
+
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Gym Companion'),
+        centerTitle: true,
+      ),
+
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+
+          children: [
+
+            const Text(
+              'Welcome Back 💪',
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+
+              decoration: BoxDecoration(
+                color: Colors.grey[900],
+                borderRadius: BorderRadius.circular(20),
+              ),
+
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+
+                children: [
+
+                  Text(
+                    'Calories',
+                    style: TextStyle(fontSize: 18),
+                  ),
+
+                  SizedBox(height: 10),
+
+                  Text(
+                    '2,150 / 2,800',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            Row(
+              children: [
+
+                Expanded(
+                  child: _buildStatCard(
+                    'Protein',
+                    '165g',
+                    Icons.fitness_center,
+                  ),
+                ),
+
+                const SizedBox(width: 15),
+
+                Expanded(
+                  child: _buildStatCard(
+                    'Water',
+                    '3.2L',
+                    Icons.water_drop,
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 20),
+
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+
+                decoration: BoxDecoration(
+                  color: Colors.grey[900],
+                  borderRadius: BorderRadius.circular(20),
+                ),
+
+                child: const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: [
+
+                    Text(
+                      'Today’s Workout',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    SizedBox(height: 20),
+
+                    Text(
+                      'Push Day',
+                      style: TextStyle(fontSize: 20),
+                    ),
+
+                    SizedBox(height: 10),
+
+                    Text('Bench Press'),
+                    Text('Shoulder Press'),
+                    Text('Tricep Pushdowns'),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+Widget _buildStatCard(
+  String title,
+  String value,
+  IconData icon,
+) {
+
+  return Container(
+    padding: const EdgeInsets.all(20),
+
+    decoration: BoxDecoration(
+      color: Colors.grey[900],
+      borderRadius: BorderRadius.circular(20),
+    ),
+
+    child: Column(
+      children: [
+
+        Icon(icon, size: 40),
+
+        const SizedBox(height: 10),
+
+        Text(
+          title,
+          style: const TextStyle(fontSize: 18),
+        ),
+
+        const SizedBox(height: 10),
+
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildAnalyticsCard(
+  String title,
+  String value,
+  IconData icon,
+) {
+
+  return Container(
+    width: double.infinity,
+    padding: const EdgeInsets.all(20),
+
+    decoration: BoxDecoration(
+      color: Colors.grey[900],
+      borderRadius: BorderRadius.circular(20),
+    ),
+
+    child: Row(
+      children: [
+
+        Icon(
+          icon,
+          size: 40,
+          color: Colors.greenAccent,
+        ),
+
+        const SizedBox(width: 20),
+
+        Column(
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
+
+          children: [
+
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.grey,
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
+
+class WorkoutScreen extends StatelessWidget {
+  const WorkoutScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Workout Tracker'),
+        centerTitle: true,
+      ),
+
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+
+        child: ListView(
+          children: [
+
+            _buildWorkoutCard(
+              context,
+              'Push Day',
+              'Chest • Shoulders • Triceps',
+              Icons.fitness_center,
+            ),
+
+            const SizedBox(height: 20),
+
+            _buildWorkoutCard(
+              context,
+              'Pull Day',
+              'Back • Biceps',
+              Icons.sports_gymnastics,
+            ),
+
+            const SizedBox(height: 20),
+
+            _buildWorkoutCard(
+              context,
+              'Leg Day',
+              'Quads • Hamstrings • Calves',
+              Icons.directions_run,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+Widget _buildWorkoutCard(
+  BuildContext context,
+  String title,
+  String subtitle,
+  IconData icon,
+) {
+
+  return GestureDetector(
+    onTap: () {
+
+      Navigator.push(
+        context,
+
+        MaterialPageRoute(
+          builder: (context) => WorkoutDetailScreen(
+            workoutTitle: title,
+          ),
+        ),
+      );
+    },
+
+    child: Container(
+      padding: const EdgeInsets.all(20),
+
+      decoration: BoxDecoration(
+        color: Colors.grey[900],
+        borderRadius: BorderRadius.circular(20),
+      ),
+
+      child: Row(
+        children: [
+
+          Icon(
+            icon,
+            size: 50,
+            color: Colors.greenAccent,
+          ),
+
+          const SizedBox(width: 20),
+
+          Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
+
+            children: [
+
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 5),
+
+              Text(
+                subtitle,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+class WorkoutDetailScreen extends StatelessWidget {
+
+  final String workoutTitle;
+
+  const WorkoutDetailScreen({
+    super.key,
+    required this.workoutTitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(workoutTitle),
+      ),
+
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+
+        child: Column(
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
+
+          children: [
+
+            const Text(
+              'Exercises',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            ..._getExercisesForWorkout(
+              context,
+              workoutTitle,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+Widget _buildExerciseTile(
+  BuildContext context,
+  String exerciseName,
+) {
+
+  return GestureDetector(
+    onTap: () {
+
+      Navigator.push(
+        context,
+
+        MaterialPageRoute(
+          builder: (context) => ExerciseLogScreen(
+            exerciseName: exerciseName,
+          ),
+        ),
+      );
+    },
+
+    child: Container(
+      margin: const EdgeInsets.only(bottom: 15),
+      padding: const EdgeInsets.all(20),
+
+      decoration: BoxDecoration(
+        color: Colors.grey[900],
+        borderRadius: BorderRadius.circular(20),
+      ),
+
+      child: Row(
+        mainAxisAlignment:
+            MainAxisAlignment.spaceBetween,
+
+        children: [
+
+          Text(
+            exerciseName,
+            style: const TextStyle(
+              fontSize: 20,
+            ),
+          ),
+
+          const Icon(Icons.arrow_forward_ios),
+        ],
+      ),
+    ),
+  );
+}
+
+List<Widget> _getExercisesForWorkout(
+  BuildContext context,
+  String workoutTitle,
+) {
+
+  if (workoutTitle == 'Push Day') {
+
+    return [
+      _buildExerciseTile(context, 'Bench Press'),
+      _buildExerciseTile(context, 'Incline Dumbbell Press'),
+      _buildExerciseTile(context, 'Shoulder Press'),
+      _buildExerciseTile(context, 'Lateral Raises'),
+      _buildExerciseTile(context, 'Tricep Pushdowns'),
+    ];
+  }
+
+  else if (workoutTitle == 'Pull Day') {
+
+    return [
+      _buildExerciseTile(context, 'Pull Ups'),
+      _buildExerciseTile(context, 'Barbell Rows'),
+      _buildExerciseTile(context, 'Lat Pulldowns'),
+      _buildExerciseTile(context, 'Seated Cable Rows'),
+      _buildExerciseTile(context, 'Barbell Curls'),
+    ];
+  }
+
+  else {
+
+    return [
+      _buildExerciseTile(context, 'Squats'),
+      _buildExerciseTile(context, 'Leg Press'),
+      _buildExerciseTile(context, 'Romanian Deadlifts'),
+      _buildExerciseTile(context, 'Leg Curls'),
+      _buildExerciseTile(context, 'Calf Raises'),
+    ];
+  }
+}
+
+class ExerciseLogScreen extends StatefulWidget {
+
+  final String exerciseName;
+
+  const ExerciseLogScreen({
+    super.key,
+    required this.exerciseName,
+  });
+
+  @override
+  State<ExerciseLogScreen> createState() =>
+      _ExerciseLogScreenState();
+}
+
+class _ExerciseLogScreenState
+    extends State<ExerciseLogScreen> {
+
+  final TextEditingController weightController =
+      TextEditingController();
+
+  final TextEditingController repsController =
+      TextEditingController();
+
+  List<String> loggedSets = [];
+
+  int personalRecord = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final box = Hive.box('workoutBox');
+
+    final savedSets =
+        box.get(widget.exerciseName);
+
+    if (savedSets != null) {
+
+      setState(() {
+
+        loggedSets =
+            List<String>.from(savedSets);
+
+        for (var set in loggedSets) {
+
+          final weight =
+              int.tryParse(
+                set.split(' lbs')[0],
+              ) ?? 0;
+
+          if (weight > personalRecord) {
+
+            personalRecord = weight;
+          }
+        }
+      });
+    }
+  }
+
+  void saveSet() {
+
+    final box = Hive.box('workoutBox');
+
+    final String weight =
+        weightController.text;
+
+    final String reps =
+        repsController.text;
+
+    if (weight.isEmpty || reps.isEmpty) {
+      return;
+    }
+
+    setState(() {
+
+      final newSet =
+          '$weight lbs × $reps reps';
+
+      loggedSets.add(newSet);
+
+      final weightValue =
+          int.tryParse(weight) ?? 0;
+
+      if (weightValue > personalRecord) {
+
+        personalRecord = weightValue;
+      }
+
+      box.put(
+        widget.exerciseName,
+        loggedSets,
+      );
+
+      weightController.clear();
+      repsController.clear();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.exerciseName),
+      ),
+
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+
+        child: Column(
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
+
+          children: [
+
+            const Text(
+              'Log Your Set',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            TextField(
+              controller: weightController,
+              keyboardType:
+                  TextInputType.number,
+
+              decoration: InputDecoration(
+                labelText: 'Weight',
+
+                border: OutlineInputBorder(
+                  borderRadius:
+                      BorderRadius.circular(15),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            TextField(
+              controller: repsController,
+              keyboardType:
+                  TextInputType.number,
+
+              decoration: InputDecoration(
+                labelText: 'Reps',
+
+                border: OutlineInputBorder(
+                  borderRadius:
+                      BorderRadius.circular(15),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            SizedBox(
+              width: double.infinity,
+
+              child: ElevatedButton(
+                onPressed: saveSet,
+
+                child: const Text(
+                  'Save Set',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            Text(
+              'Personal Record: $personalRecord lbs',
+
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.greenAccent,
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            const Text(
+              'Logged Sets',
+
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            Expanded(
+              child: ListView.builder(
+                itemCount:
+                    loggedSets.length,
+
+                itemBuilder:
+                    (context, index) {
+
+                  return Container(
+                    margin:
+                        const EdgeInsets.only(
+                            bottom: 15),
+
+                    padding:
+                        const EdgeInsets.all(20),
+
+                    decoration: BoxDecoration(
+                      color: Colors.grey[900],
+
+                      borderRadius:
+                          BorderRadius.circular(
+                              20),
+                    ),
+
+                    child: Row(
+                      mainAxisAlignment:
+                          MainAxisAlignment
+                              .spaceBetween,
+
+                      children: [
+
+                        Expanded(
+                          child: Text(
+                            loggedSets[index],
+
+                            style:
+                                const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+
+                        IconButton(
+                          icon: const Icon(
+                            Icons.edit,
+                            color: Colors.blue,
+                          ),
+
+                          onPressed: () {
+
+                            final parts =
+                                loggedSets[index]
+                                    .split(
+                                        ' lbs × ');
+
+                            final currentWeight =
+                                parts[0];
+
+                            final currentReps =
+                                parts[1]
+                                    .replaceAll(
+                                        ' reps',
+                                        '');
+
+                            final editWeightController =
+                                TextEditingController(
+                              text:
+                                  currentWeight,
+                            );
+
+                            final editRepsController =
+                                TextEditingController(
+                              text:
+                                  currentReps,
+                            );
+
+                            showDialog(
+                              context: context,
+
+                              builder:
+                                  (context) {
+
+                                return AlertDialog(
+
+                                  title:
+                                      const Text(
+                                    'Edit Set',
+                                  ),
+
+                                  content:
+                                      Column(
+                                    mainAxisSize:
+                                        MainAxisSize
+                                            .min,
+
+                                    children: [
+
+                                      TextField(
+                                        controller:
+                                            editWeightController,
+
+                                        keyboardType:
+                                            TextInputType
+                                                .number,
+
+                                        decoration:
+                                            const InputDecoration(
+                                          labelText:
+                                              'Weight',
+                                        ),
+                                      ),
+
+                                      const SizedBox(
+                                          height:
+                                              20),
+
+                                      TextField(
+                                        controller:
+                                            editRepsController,
+
+                                        keyboardType:
+                                            TextInputType
+                                                .number,
+
+                                        decoration:
+                                            const InputDecoration(
+                                          labelText:
+                                              'Reps',
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  actions: [
+
+                                    TextButton(
+                                      onPressed:
+                                          () {
+
+                                        Navigator.pop(
+                                            context);
+                                      },
+
+                                      child:
+                                          const Text(
+                                        'Cancel',
+                                      ),
+                                    ),
+
+                                    ElevatedButton(
+                                      onPressed:
+                                          () {
+
+                                        final updatedSet =
+                                            '${editWeightController.text} lbs × ${editRepsController.text} reps';
+
+                                        setState(
+                                            () {
+
+                                          loggedSets[
+                                                  index] =
+                                              updatedSet;
+
+                                          personalRecord =
+                                              0;
+
+                                          for (var set
+                                              in loggedSets) {
+
+                                            final weight =
+                                                int.tryParse(
+                                                      set.split(
+                                                          ' lbs')[0],
+                                                    ) ??
+                                                    0;
+
+                                            if (weight >
+                                                personalRecord) {
+
+                                              personalRecord =
+                                                  weight;
+                                            }
+                                          }
+
+                                          final box =
+                                              Hive.box(
+                                                  'workoutBox');
+
+                                          box.put(
+                                            widget.exerciseName,
+                                            loggedSets,
+                                          );
+                                        });
+
+                                        Navigator.pop(
+                                            context);
+                                      },
+
+                                      child:
+                                          const Text(
+                                        'Save',
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
+
+                        IconButton(
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+
+                          onPressed: () {
+
+                            setState(() {
+
+                              loggedSets
+                                  .removeAt(index);
+
+                              personalRecord = 0;
+
+                              for (var set
+                                  in loggedSets) {
+
+                                final weight =
+                                    int.tryParse(
+                                          set.split(
+                                              ' lbs')[0],
+                                        ) ??
+                                        0;
+
+                                if (weight >
+                                    personalRecord) {
+
+                                  personalRecord =
+                                      weight;
+                                }
+                              }
+
+                              final box =
+                                  Hive.box(
+                                      'workoutBox');
+
+                              box.put(
+                                widget.exerciseName,
+                                loggedSets,
+                              );
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class NutritionScreen extends StatelessWidget {
+  const NutritionScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: Text(
+          'Nutrition Tracker',
+          style: TextStyle(fontSize: 28),
+        ),
+      ),
+    );
+  }
+}
+
+class ProgressScreen extends StatelessWidget {
+  const ProgressScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+
+    final box = Hive.box('workoutBox');
+
+    int totalSets = 0;
+    int highestPR = 0;
+    int totalVolume = 0;
+
+    for (var key in box.keys) {
+
+      final sets =
+          List<String>.from(
+              box.get(key));
+
+      totalSets += sets.length;
+
+      for (var set in sets) {
+
+        final parts =
+            set.split(' lbs × ');
+
+        final weight =
+            int.tryParse(parts[0]) ?? 0;
+
+        final reps =
+            int.tryParse(
+              parts[1]
+                  .replaceAll(
+                      ' reps',
+                      ''),
+            ) ?? 0;
+
+        final volume =
+            weight * reps;
+
+        totalVolume += volume;
+
+        if (weight > highestPR) {
+
+          highestPR = weight;
+        }
+      }
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Progress Analytics',
+        ),
+        centerTitle: true,
+      ),
+
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+
+        child: Column(
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
+
+          children: [
+
+            _buildAnalyticsCard(
+              'Total Sets Logged',
+              '$totalSets',
+              Icons.format_list_numbered,
+            ),
+
+            const SizedBox(height: 20),
+
+            _buildAnalyticsCard(
+              'Highest Personal Record',
+              '$highestPR lbs',
+              Icons.emoji_events,
+            ),
+
+            const SizedBox(height: 20),
+
+            _buildAnalyticsCard(
+              'Total Workout Volume',
+              '$totalVolume lbs',
+              Icons.bar_chart,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: Text(
+          'Settings',
+          style: TextStyle(fontSize: 28),
+        ),
+      ),
+    );
+  }
+}
