@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
+import 'package:fl_chart/fl_chart.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -1093,13 +1093,10 @@ class ProgressScreen extends StatelessWidget {
                       ''),
             ) ?? 0;
 
-        final volume =
+        totalVolume +=
             weight * reps;
 
-        totalVolume += volume;
-
         if (weight > highestPR) {
-
           highestPR = weight;
         }
       }
@@ -1113,8 +1110,9 @@ class ProgressScreen extends StatelessWidget {
         centerTitle: true,
       ),
 
-      body: Padding(
-        padding: const EdgeInsets.all(16),
+      body: SingleChildScrollView(
+        padding:
+            const EdgeInsets.all(16),
 
         child: Column(
           crossAxisAlignment:
@@ -1142,6 +1140,100 @@ class ProgressScreen extends StatelessWidget {
               'Total Workout Volume',
               '$totalVolume lbs',
               Icons.bar_chart,
+            ),
+
+            const SizedBox(height: 30),
+
+            const Text(
+              'Bench Press Progress',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight:
+                    FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            SizedBox(
+              height: 250,
+
+              child: LineChart(
+
+                LineChartData(
+
+                  gridData:
+                      FlGridData(
+                    show: true,
+                  ),
+
+                  borderData:
+                      FlBorderData(
+                    show: true,
+                  ),
+
+                  titlesData:
+                      FlTitlesData(
+                    show: true,
+                  ),
+
+                  lineBarsData: [
+
+                    LineChartBarData(
+                      isCurved: true,
+
+                      spots: () {
+
+                        final benchSets =
+                            box.get(
+                                'Bench Press');
+
+                        if (benchSets ==
+                            null) {
+                          return <FlSpot>[];
+                        }
+
+                        List<FlSpot>
+                            spots = [];
+
+                        for (int i = 0;
+                            i <
+                                benchSets
+                                    .length;
+                            i++) {
+
+                          final set =
+                              benchSets[
+                                  i];
+
+                          final weight =
+                              int.tryParse(
+                                    set.split(
+                                        ' lbs')[0],
+                                  ) ??
+                                  0;
+
+                          spots.add(
+                            FlSpot(
+                              i.toDouble(),
+                              weight
+                                  .toDouble(),
+                            ),
+                          );
+                        }
+
+                        return spots;
+
+                      }(),
+
+                      dotData:
+                          FlDotData(
+                        show: true,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
