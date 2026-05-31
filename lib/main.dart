@@ -123,10 +123,10 @@ class HomeScreen extends StatelessWidget {
 
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(24),
 
-              decoration: BoxDecoration(
-                color: Colors.grey[900],
+decoration: BoxDecoration(
+  color: Colors.grey[850],
                 borderRadius: BorderRadius.circular(20),
               ),
 
@@ -653,7 +653,20 @@ class _ExerciseLogScreenState
       final newSet =
           '$weight lbs × $reps reps';
 
-      loggedSets.add(newSet);
+      final timestamp =
+    DateTime.now();
+
+final formattedSet =
+    '$newSet\n'
+    '${timestamp.month}/'
+    '${timestamp.day}/'
+    '${timestamp.year} - '
+    '${timestamp.hour}:'
+    '${timestamp.minute.toString().padLeft(2, '0')}';
+
+loggedSets.add(
+  formattedSet,
+);
 
       final weightValue =
           int.tryParse(weight) ?? 0;
@@ -1056,9 +1069,43 @@ class NutritionScreen extends StatelessWidget {
     );
   }
 }
-
-class ProgressScreen extends StatelessWidget {
+class ProgressScreen extends StatefulWidget {
   const ProgressScreen({super.key});
+
+  @override
+  State<ProgressScreen> createState() =>
+      _ProgressScreenState();
+}
+
+class _ProgressScreenState
+    extends State<ProgressScreen> {
+
+  String selectedExercise =
+      'Bench Press';
+
+  final List<String> exercises = [
+
+    // Push Day
+    'Bench Press',
+    'Incline Dumbbell Press',
+    'Shoulder Press',
+    'Lateral Raises',
+    'Tricep Pushdowns',
+
+    // Pull Day
+    'Pull Ups',
+    'Barbell Rows',
+    'Lat Pulldowns',
+    'Seated Cable Rows',
+    'Barbell Curls',
+
+    // Leg Day
+    'Squats',
+    'Leg Press',
+    'Romanian Deadlifts',
+    'Leg Curls',
+    'Calf Raises',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -1144,9 +1191,39 @@ class ProgressScreen extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-            const Text(
-              'Bench Press Progress',
-              style: TextStyle(
+            DropdownButton<String>(
+              value: selectedExercise,
+              isExpanded: true,
+
+              items:
+                  exercises.map((exercise) {
+
+                return DropdownMenuItem(
+                  value: exercise,
+
+                  child: Text(
+                    exercise,
+                  ),
+                );
+
+              }).toList(),
+
+              onChanged: (value) {
+
+                setState(() {
+
+                  selectedExercise =
+                      value!;
+                });
+              },
+            ),
+
+            const SizedBox(height: 20),
+
+            Text(
+              '$selectedExercise Progress',
+
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight:
                     FontWeight.bold,
@@ -1159,7 +1236,6 @@ class ProgressScreen extends StatelessWidget {
               height: 250,
 
               child: LineChart(
-
                 LineChartData(
 
                   gridData:
@@ -1184,26 +1260,30 @@ class ProgressScreen extends StatelessWidget {
 
                       spots: () {
 
-                        final benchSets =
+                        final savedSets =
                             box.get(
-                                'Bench Press');
+                              selectedExercise,
+                            );
 
-                        if (benchSets ==
+                        if (savedSets ==
                             null) {
+
                           return <FlSpot>[];
                         }
 
                         List<FlSpot>
                             spots = [];
 
-                        for (int i = 0;
-                            i <
-                                benchSets
-                                    .length;
-                            i++) {
+                        for (
+                          int i = 0;
+                          i <
+                              savedSets
+                                  .length;
+                          i++
+                        ) {
 
                           final set =
-                              benchSets[
+                              savedSets[
                                   i];
 
                           final weight =
@@ -1214,6 +1294,7 @@ class ProgressScreen extends StatelessWidget {
                                   0;
 
                           spots.add(
+
                             FlSpot(
                               i.toDouble(),
                               weight
@@ -1235,6 +1316,194 @@ class ProgressScreen extends StatelessWidget {
                 ),
               ),
             ),
+
+            const SizedBox(height: 40),
+
+            const Text(
+              'TODAY',
+
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight:
+                    FontWeight.bold,
+                color:
+                    Colors.greenAccent,
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            ...box.keys.map((key) {
+
+              final sets =
+                  List<String>.from(
+                      box.get(key));
+
+              sets.sort(
+                (a, b) =>
+                    b.compareTo(a),
+              );
+
+              final today =
+                  '${DateTime.now().month}/'
+                  '${DateTime.now().day}/'
+                  '${DateTime.now().year}';
+
+              final todaySets =
+                  sets.where((set) {
+
+                return set.contains(
+                    today);
+
+              }).toList();
+
+              final yesterday =
+                  DateTime.now()
+                      .subtract(
+                const Duration(
+                    days: 1),
+              );
+
+              final yesterdayDate =
+                  '${yesterday.month}/'
+                  '${yesterday.day}/'
+                  '${yesterday.year}';
+
+              final yesterdaySets =
+                  sets.where((set) {
+
+                return set.contains(
+                    yesterdayDate);
+
+              }).toList();
+
+              return Container(
+                margin:
+                    const EdgeInsets.only(
+                        bottom: 20),
+
+                padding:
+                    const EdgeInsets.all(
+                        24),
+
+                decoration:
+                    BoxDecoration(
+                  color:
+                      Colors.grey[850],
+
+                  borderRadius:
+                      BorderRadius.circular(
+                          20),
+                ),
+
+                child: Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment
+                          .start,
+
+                  children: [
+
+                    Text(
+                      '$key Session',
+
+                      style:
+                          const TextStyle(
+                        fontSize: 22,
+                        fontWeight:
+                            FontWeight.bold,
+                      ),
+                    ),
+
+                    const SizedBox(
+                        height: 12),
+
+                    Container(
+                      height: 2,
+                      color:
+                          Colors.white24,
+                    ),
+
+                    const SizedBox(
+                        height: 16),
+
+                    ...todaySets.map((set) {
+
+                      return Padding(
+                        padding:
+                            const EdgeInsets
+                                .only(
+                                    bottom:
+                                        8),
+
+                        child: Text(
+                          set.replaceAll(
+                              '\n',
+                              '\n🕒 '),
+
+                          style:
+                              const TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      );
+
+                    }).toList(),
+
+                    if (yesterdaySets
+                        .isNotEmpty) ...[
+
+                      const SizedBox(
+                          height: 30),
+
+                      const Text(
+                        'YESTERDAY',
+
+                        style:
+                            TextStyle(
+                          fontSize:
+                              22,
+                          fontWeight:
+                              FontWeight
+                                  .bold,
+                          color:
+                              Colors
+                                  .orangeAccent,
+                        ),
+                      ),
+
+                      const SizedBox(
+                          height: 15),
+
+                      ...yesterdaySets
+                          .map((set) {
+
+                        return Padding(
+                          padding:
+                              const EdgeInsets
+                                  .only(
+                                      bottom:
+                                          8),
+
+                          child: Text(
+                            set.replaceAll(
+                                '\n',
+                                '\n🕒 '),
+
+                            style:
+                                const TextStyle(
+                              fontSize:
+                                  18,
+                            ),
+                          ),
+                        );
+
+                      }).toList(),
+                    ],
+                  ],
+                ),
+              );
+
+            }).toList(),
           ],
         ),
       ),
@@ -1251,7 +1520,9 @@ class SettingsScreen extends StatelessWidget {
       body: Center(
         child: Text(
           'Settings',
-          style: TextStyle(fontSize: 28),
+          style: TextStyle(
+            fontSize: 28,
+          ),
         ),
       ),
     );
