@@ -40,6 +40,7 @@ class _MainScreenState extends State<MainScreen> {
     const WorkoutScreen(),
     const NutritionScreen(),
     const ProgressScreen(),
+    const CalculatorScreen(),
     const SettingsScreen(),
   ];
 
@@ -78,15 +79,20 @@ class _MainScreenState extends State<MainScreen> {
           ),
 
           BottomNavigationBarItem(
-            icon: Icon(Icons.show_chart),
-            label: 'Progress',
-          ),
+  icon: Icon(Icons.show_chart),
+  label: 'Progress',
+),
 
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
+BottomNavigationBarItem(
+  icon: Icon(Icons.calculate),
+  label: 'Calculator',
+),
+
+BottomNavigationBarItem(
+  icon: Icon(Icons.settings),
+  label: 'Settings',
+),
+                ],
       ),
     );
   }
@@ -1511,6 +1517,251 @@ class _ProgressScreenState
   }
 }
 
+
+class CalculatorScreen
+    extends StatefulWidget {
+
+  const CalculatorScreen({
+    super.key,
+  });
+
+  @override
+  State<CalculatorScreen>
+      createState() =>
+          _CalculatorScreenState();
+}
+
+class _CalculatorScreenState
+    extends State<CalculatorScreen> {
+
+  final TextEditingController
+      weightController =
+          TextEditingController();
+
+  final TextEditingController
+      feetController =
+          TextEditingController();
+
+  final TextEditingController
+      inchesController =
+          TextEditingController();
+
+  String bmiResult = '';
+
+  @override
+  Widget build(
+      BuildContext context) {
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Fitness Calculator',
+        ),
+        centerTitle: true,
+      ),
+
+      body: SingleChildScrollView(
+        padding:
+            const EdgeInsets.all(
+                20),
+
+        child: Column(
+          crossAxisAlignment:
+              CrossAxisAlignment
+                  .start,
+
+          children: [
+
+            const Text(
+              'BMI Calculator',
+
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight:
+                    FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(
+                height: 25),
+
+            const Text(
+              'Weight (lbs)',
+            ),
+
+            TextField(
+              controller:
+                  weightController,
+
+              keyboardType:
+                  TextInputType.number,
+
+              decoration:
+                  const InputDecoration(
+                hintText:
+                    'Enter weight',
+                border:
+                    OutlineInputBorder(),
+              ),
+            ),
+
+            const SizedBox(
+                height: 20),
+
+            const Text(
+              'Height',
+            ),
+
+            const SizedBox(
+                height: 10),
+
+            Row(
+              children: [
+
+                Expanded(
+                  child: TextField(
+                    controller:
+                        feetController,
+
+                    keyboardType:
+                        TextInputType
+                            .number,
+
+                    decoration:
+                        const InputDecoration(
+                      hintText:
+                          'Feet',
+                      border:
+                          OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(
+                    width: 10),
+
+                Expanded(
+                  child: TextField(
+                    controller:
+                        inchesController,
+
+                    keyboardType:
+                        TextInputType
+                            .number,
+
+                    decoration:
+                        const InputDecoration(
+                      hintText:
+                          'Inches',
+                      border:
+                          OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(
+                height: 25),
+
+            ElevatedButton(
+              onPressed: () {
+
+                final weight =
+                    double.tryParse(
+                      weightController
+                          .text,
+                    ) ?? 0;
+
+                final feet =
+                    double.tryParse(
+                      feetController
+                          .text,
+                    ) ?? 0;
+
+                final inches =
+                    double.tryParse(
+                      inchesController
+                          .text,
+                    ) ?? 0;
+
+                if (weight == 0 ||
+                    feet == 0) {
+
+                  setState(() {
+
+                    bmiResult =
+                        'Please enter valid values';
+                  });
+
+                  return;
+                }
+
+                final totalInches =
+                    (feet * 12) +
+                        inches;
+
+                final bmi =
+                    (weight /
+                        (totalInches *
+                            totalInches)) *
+                    703;
+
+                String category =
+                    '';
+
+                if (bmi < 18.5) {
+
+                  category =
+                      'Underweight';
+
+                } else if (bmi < 25) {
+
+                  category =
+                      'Healthy Weight';
+
+                } else if (bmi < 30) {
+
+                  category =
+                      'Overweight';
+
+                } else {
+
+                  category =
+                      'Obese';
+                }
+
+                setState(() {
+
+                  bmiResult =
+                      'BMI: ${bmi.toStringAsFixed(1)}\n$category';
+                });
+              },
+
+              child: const Text(
+                'Calculate BMI',
+              ),
+            ),
+
+            const SizedBox(
+                height: 25),
+
+            Text(
+              bmiResult,
+
+              style:
+                  const TextStyle(
+                fontSize: 24,
+                fontWeight:
+                    FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
