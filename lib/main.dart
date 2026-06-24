@@ -108,52 +108,123 @@ class HomeScreen extends StatelessWidget {
         title: const Text('Gym Companion'),
         centerTitle: true,
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(16),
-
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-
           children: [
-
             const Text(
               'Welcome Back 💪',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 25),
 
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(24),
-
-decoration: BoxDecoration(
-  color: Colors.grey[850],
+              decoration: BoxDecoration(
+                color: Colors.grey[850],
                 borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.greenAccent, width: 2),
               ),
-
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-
                 children: [
-
-                  Text(
-                    'Calories',
-                    style: TextStyle(fontSize: 18),
+                  const Text(
+                    '🏋️ Today’s Program',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
 
-                  SizedBox(height: 10),
+                  const SizedBox(height: 12),
 
+                  const Text(
+                    'Not started yet',
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                  ),
+
+                  const SizedBox(height: 18),
+
+                  const Text(
+                    'Let’s build your workout path based on where you train.',
+                    style: TextStyle(fontSize: 16),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  ElevatedButton(
+                    onPressed: () {
+  showModalBottomSheet(
+  context: context,
+  builder: (context) {
+    return SizedBox(
+  height: 260,
+  child: Column(
+    children: [
+      SizedBox(height: 20),
+
+      Text(
+        'Where are you training?',
+        style: TextStyle(
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+
+      SizedBox(height: 20),
+
+      ListTile(
+        leading: Text('🏠'),
+        onTap: () {
+          Navigator.pop(context);
+        },
+        title: Text('Home'),
+      ),
+
+      ListTile(
+        leading: Text('🏋️'),
+        onTap: () {
+          Navigator.pop(context);
+        },
+        title: Text('Gym'),
+      ),
+
+      ListTile(
+        leading: Text('🌳'),
+        onTap: () {
+          Navigator.pop(context);
+        },
+        title: Text('Outside'),
+      ),
+    ],
+  ),
+);
+  },
+);
+},
+                    child: const Text('Choose Your Program'),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.grey[850],
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Calories', style: TextStyle(fontSize: 18)),
+                  SizedBox(height: 10),
                   Text(
                     '2,150 / 2,800',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -163,7 +234,6 @@ decoration: BoxDecoration(
 
             Row(
               children: [
-
                 Expanded(
                   child: _buildStatCard(
                     'Protein',
@@ -171,9 +241,7 @@ decoration: BoxDecoration(
                     Icons.fitness_center,
                   ),
                 ),
-
                 const SizedBox(width: 15),
-
                 Expanded(
                   child: _buildStatCard(
                     'Water',
@@ -190,34 +258,20 @@ decoration: BoxDecoration(
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
-
                 decoration: BoxDecoration(
                   color: Colors.grey[900],
                   borderRadius: BorderRadius.circular(20),
                 ),
-
                 child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-
                   children: [
-
                     Text(
                       'Today’s Workout',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     ),
-
                     SizedBox(height: 20),
-
-                    Text(
-                      'Push Day',
-                      style: TextStyle(fontSize: 20),
-                    ),
-
+                    Text('Push Day', style: TextStyle(fontSize: 20)),
                     SizedBox(height: 10),
-
                     Text('Bench Press'),
                     Text('Shoulder Press'),
                     Text('Tricep Pushdowns'),
@@ -231,7 +285,6 @@ decoration: BoxDecoration(
     );
   }
 }
-
 Widget _buildStatCard(
   String title,
   String value,
