@@ -177,6 +177,12 @@ class HomeScreen extends StatelessWidget {
         leading: Text('🏠'),
         onTap: () {
           Navigator.pop(context);
+          Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (context) => const HomeSetupScreen(),
+  ),
+);
         },
         title: Text('Home'),
       ),
@@ -285,6 +291,49 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+
+class HomeSetupScreen extends StatelessWidget {
+  const HomeSetupScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home Program Setup'),
+      ),
+      body: Padding(
+  padding: const EdgeInsets.all(24),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: const [
+
+      SizedBox(height: 20),
+
+      Text(
+        'Question 1 of 4',
+        style: TextStyle(
+          fontSize: 18,
+          color: Colors.grey,
+        ),
+      ),
+
+      SizedBox(height: 20),
+
+      Text(
+        'What equipment do you have?',
+        style: TextStyle(
+          fontSize: 28,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ],
+  ),
+),
+    );
+  }
+}  
+
+      
 Widget _buildStatCard(
   String title,
   String value,
