@@ -292,8 +292,13 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class HomeSetupScreen extends StatelessWidget {
+class HomeSetupScreen extends StatefulWidget {
   const HomeSetupScreen({super.key});
+
+@override
+  State<HomeSetupScreen> createState() => _HomeSetupScreenState();
+}
+class _HomeSetupScreenState extends State<HomeSetupScreen> {
 
   @override
   Widget build(BuildContext context) {
@@ -305,9 +310,9 @@ class HomeSetupScreen extends StatelessWidget {
   padding: const EdgeInsets.all(24),
   child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
-    children: const [
+    children:  [
 
-      SizedBox(height: 20),
+     const SizedBox(height: 20),
 
       Text(
         'Question 1 of 4',
@@ -326,6 +331,26 @@ class HomeSetupScreen extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
+      const SizedBox(height: 20),
+      RadioListTile<String>(
+  title: const Text('None'),
+  value: 'None',
+  groupValue: null,
+  onChanged: (value) {},
+      ),
+
+   RadioListTile<String>(
+  title: const Text('Resistance Bands'),
+  value: 'Resistance Bands',
+  groupValue: null,
+  onChanged: (value) {},
+),
+RadioListTile<String>(
+  title: const Text('Dumbbells'),
+  value: 'Dumbbells',
+  groupValue: null,
+  onChanged: (value) {},
+),
     ],
   ),
 ),
