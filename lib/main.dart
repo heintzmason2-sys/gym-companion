@@ -295,10 +295,12 @@ class HomeScreen extends StatelessWidget {
 class HomeSetupScreen extends StatefulWidget {
   const HomeSetupScreen({super.key});
 
+
 @override
   State<HomeSetupScreen> createState() => _HomeSetupScreenState();
 }
 class _HomeSetupScreenState extends State<HomeSetupScreen> {
+  String? selectedEquipment;
 
   @override
   Widget build(BuildContext context) {
@@ -335,21 +337,43 @@ class _HomeSetupScreenState extends State<HomeSetupScreen> {
       RadioListTile<String>(
   title: const Text('None'),
   value: 'None',
-  groupValue: null,
-  onChanged: (value) {},
+  groupValue: selectedEquipment,
+  onChanged: (value) {
+    setState(() {
+      selectedEquipment = value;
+    });
+    }
       ),
 
    RadioListTile<String>(
   title: const Text('Resistance Bands'),
   value: 'Resistance Bands',
-  groupValue: null,
-  onChanged: (value) {},
+  groupValue: selectedEquipment,
+  onChanged: (value) {
+    setState(() {
+      selectedEquipment = value;
+    });
+    }
 ),
 RadioListTile<String>(
   title: const Text('Dumbbells'),
   value: 'Dumbbells',
-  groupValue: null,
-  onChanged: (value) {},
+  groupValue: selectedEquipment,
+  onChanged: (value) {
+    setState(() {
+      selectedEquipment = value;
+    });
+    }
+    
+),
+
+const SizedBox(height: 30),
+
+ElevatedButton(
+  onPressed: () {
+    print(selectedEquipment);
+  },
+  child: const Text('Continue'),
 ),
     ],
   ),
