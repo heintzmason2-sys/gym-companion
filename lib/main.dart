@@ -301,6 +301,8 @@ class HomeSetupScreen extends StatefulWidget {
 }
 class _HomeSetupScreenState extends State<HomeSetupScreen> {
   String? selectedEquipment;
+  String? selectedExperience;
+  int currentQuestion = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -317,7 +319,7 @@ class _HomeSetupScreenState extends State<HomeSetupScreen> {
      const SizedBox(height: 20),
 
       Text(
-        'Question 1 of 4',
+        'Question $currentQuestion of 4',
         style: TextStyle(
           fontSize: 18,
           color: Colors.grey,
@@ -327,7 +329,9 @@ class _HomeSetupScreenState extends State<HomeSetupScreen> {
       SizedBox(height: 20),
 
       Text(
-        'What equipment do you have?',
+        currentQuestion == 1
+    ? 'What equipment do you have?'
+    : 'What is your experience level?',
         style: TextStyle(
           fontSize: 28,
           fontWeight: FontWeight.bold,
@@ -335,30 +339,44 @@ class _HomeSetupScreenState extends State<HomeSetupScreen> {
       ),
       const SizedBox(height: 20),
       RadioListTile<String>(
-  title: const Text('None'),
-  value: 'None',
-  groupValue: selectedEquipment,
+  title: Text(
+  currentQuestion == 1 ? 'None' : 'Beginner',
+),
+  value: currentQuestion == 1 ? 'None' : 'Beginner',
+  groupValue: currentQuestion == 1 ? selectedEquipment : selectedExperience,
   onChanged: (value) {
     setState(() {
-      selectedEquipment = value;
+      if (currentQuestion == 1) {
+  selectedEquipment = value;
+} else {
+  selectedExperience = value;
+}
     });
     }
       ),
 
    RadioListTile<String>(
-  title: const Text('Resistance Bands'),
-  value: 'Resistance Bands',
-  groupValue: selectedEquipment,
+  title: Text(
+  currentQuestion == 1 ? 'Resistance Bands' : 'Intermediate',
+),
+  value: currentQuestion == 1 ? 'Resistance Bands' : 'Intermediate',
+  groupValue: currentQuestion == 1 ? selectedEquipment : selectedExperience,
   onChanged: (value) {
     setState(() {
-      selectedEquipment = value;
+      if (currentQuestion == 1) {
+  selectedEquipment = value;
+} else {
+  selectedExperience = value;
+}
     });
     }
 ),
 RadioListTile<String>(
-  title: const Text('Dumbbells'),
+  title: Text(
+    currentQuestion == 1 ? 'Dumbbells' : 'Advanced',
+  ),
   value: 'Dumbbells',
-  groupValue: selectedEquipment,
+  groupValue: currentQuestion == 1 ? selectedEquipment : selectedExperience,
   onChanged: (value) {
     setState(() {
       selectedEquipment = value;
@@ -370,9 +388,21 @@ RadioListTile<String>(
 const SizedBox(height: 30),
 
 ElevatedButton(
+  
   onPressed: () {
-    print(selectedEquipment);
-  },
+  if (selectedEquipment == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+  const SnackBar(
+    content: Text('Please select your equipment before continuing.'),
+  ),
+);
+    return;
+  }
+
+  setState(() {
+  currentQuestion = 2;
+});
+},
   child: const Text('Continue'),
 ),
     ],
