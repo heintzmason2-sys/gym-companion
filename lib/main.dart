@@ -302,6 +302,7 @@ class HomeSetupScreen extends StatefulWidget {
 class _HomeSetupScreenState extends State<HomeSetupScreen> {
   String? selectedEquipment;
   String? selectedExperience;
+  String? selectedGoal;
   int currentQuestion = 1;
 
   @override
@@ -331,7 +332,9 @@ class _HomeSetupScreenState extends State<HomeSetupScreen> {
       Text(
         currentQuestion == 1
     ? 'What equipment do you have?'
-    : 'What is your experience level?',
+    : currentQuestion == 2
+        ? 'What is your experience level?'
+        : 'What is your training goal?',
         style: TextStyle(
           fontSize: 28,
           fontWeight: FontWeight.bold,
@@ -340,16 +343,30 @@ class _HomeSetupScreenState extends State<HomeSetupScreen> {
       const SizedBox(height: 20),
       RadioListTile<String>(
   title: Text(
-  currentQuestion == 1 ? 'None' : 'Beginner',
+  currentQuestion == 1
+  ? 'No Equipment'
+    : currentQuestion == 2
+        ? 'Beginner'
+        : 'Build Muscle',
 ),
-  value: currentQuestion == 1 ? 'None' : 'Beginner',
-  groupValue: currentQuestion == 1 ? selectedEquipment : selectedExperience,
+  value: currentQuestion == 1
+    ? 'No Equipment'
+    : currentQuestion == 2
+        ? 'Beginner'
+        : 'Build Muscle',
+  groupValue: currentQuestion == 1
+    ? selectedEquipment
+    : currentQuestion == 2
+        ? selectedExperience
+        : selectedGoal,
   onChanged: (value) {
     setState(() {
       if (currentQuestion == 1) {
   selectedEquipment = value;
-} else {
+} else if (currentQuestion == 2) {
   selectedExperience = value;
+} else {
+  selectedGoal = value;
 }
     });
     }
@@ -357,51 +374,97 @@ class _HomeSetupScreenState extends State<HomeSetupScreen> {
 
    RadioListTile<String>(
   title: Text(
-  currentQuestion == 1 ? 'Resistance Bands' : 'Intermediate',
-),
-  value: currentQuestion == 1 ? 'Resistance Bands' : 'Intermediate',
-  groupValue: currentQuestion == 1 ? selectedEquipment : selectedExperience,
+    currentQuestion == 1
+        ? 'Resistance Bands'
+        : currentQuestion == 2
+            ? 'Intermediate'
+            : 'Get Stronger',
+  ),
+  value: currentQuestion == 1
+      ? 'Resistance Bands'
+      : currentQuestion == 2
+          ? 'Intermediate'
+          : 'Get Stronger',
+  groupValue: currentQuestion == 1
+      ? selectedEquipment
+      : currentQuestion == 2
+          ? selectedExperience
+          : selectedGoal,
   onChanged: (value) {
     setState(() {
       if (currentQuestion == 1) {
-  selectedEquipment = value;
-} else {
-  selectedExperience = value;
-}
+        selectedEquipment = value;
+      } else if (currentQuestion == 2) {
+        selectedExperience = value;
+      } else {
+        selectedGoal = value;
+      }
     });
-    }
+  },
 ),
 RadioListTile<String>(
   title: Text(
-    currentQuestion == 1 ? 'Dumbbells' : 'Advanced',
+    currentQuestion == 1
+        ? 'Weights & Machines'
+        : currentQuestion == 2
+            ? 'Advanced'
+            : 'General Fitness',
   ),
-  value: 'Dumbbells',
-  groupValue: currentQuestion == 1 ? selectedEquipment : selectedExperience,
+  value: currentQuestion == 1
+      ? 'Weights & Machines'
+      : currentQuestion == 2
+          ? 'Advanced'
+          : 'General Fitness',
+  groupValue: currentQuestion == 1
+      ? selectedEquipment
+      : currentQuestion == 2
+          ? selectedExperience
+          : selectedGoal,
   onChanged: (value) {
     setState(() {
-      selectedEquipment = value;
+      if (currentQuestion == 1) {
+        selectedEquipment = value;
+      } else if (currentQuestion == 2) {
+        selectedExperience = value;
+      } else {
+        selectedGoal = value;
+      }
     });
-    }
-    
+  },
 ),
-
 const SizedBox(height: 30),
 
 ElevatedButton(
   
   onPressed: () {
-  if (selectedEquipment == null) {
+  if (currentQuestion == 1 && selectedEquipment == null) {
     ScaffoldMessenger.of(context).showSnackBar(
-  const SnackBar(
-    content: Text('Please select your equipment before continuing.'),
-  ),
-);
+      const SnackBar(
+        content: Text('Please select your equipment before continuing.'),
+      ),
+    );
     return;
   }
 
+  if (currentQuestion == 2 && selectedExperience == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Please select your experience level before continuing.'),
+      ),
+    );
+    return;
+  }
+if (currentQuestion == 3 && selectedGoal == null) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text('Please select your training goal before continuing.'),
+    ),
+  );
+  return;
+}
   setState(() {
-  currentQuestion = 2;
-});
+    currentQuestion++;
+  });
 },
   child: const Text('Continue'),
 ),
