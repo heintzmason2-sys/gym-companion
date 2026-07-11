@@ -303,6 +303,7 @@ class _HomeSetupScreenState extends State<HomeSetupScreen> {
   String? selectedEquipment;
   String? selectedExperience;
   String? selectedGoal;
+  String? selectedTrainingDays;
   int currentQuestion = 1;
 
   @override
@@ -330,47 +331,59 @@ class _HomeSetupScreenState extends State<HomeSetupScreen> {
       SizedBox(height: 20),
 
       Text(
-        currentQuestion == 1
-    ? 'What equipment do you have?'
-    : currentQuestion == 2
-        ? 'What is your experience level?'
-        : 'What is your training goal?',
+  currentQuestion == 1
+      ? 'What equipment do you have?'
+      : currentQuestion == 2
+          ? 'What is your experience level?'
+          : currentQuestion == 3
+              ? 'What is your training goal?'
+              : 'How many days per week can you train?',
         style: TextStyle(
           fontSize: 28,
           fontWeight: FontWeight.bold,
         ),
       ),
       const SizedBox(height: 20),
+      
       RadioListTile<String>(
   title: Text(
-  currentQuestion == 1
-  ? 'No Equipment'
-    : currentQuestion == 2
-        ? 'Beginner'
-        : 'Build Muscle',
-),
+    currentQuestion == 1
+        ? 'No Equipment'
+        : currentQuestion == 2
+            ? 'Beginner'
+            : currentQuestion == 3
+                ? 'Build Muscle'
+                : '3 Days',
+  ),
   value: currentQuestion == 1
-    ? 'No Equipment'
-    : currentQuestion == 2
-        ? 'Beginner'
-        : 'Build Muscle',
+      ? 'No Equipment'
+      : currentQuestion == 2
+          ? 'Beginner'
+          : currentQuestion == 3
+              ? 'Build Muscle'
+              : '3 Days',
   groupValue: currentQuestion == 1
-    ? selectedEquipment
-    : currentQuestion == 2
-        ? selectedExperience
-        : selectedGoal,
+      ? selectedEquipment
+      : currentQuestion == 2
+          ? selectedExperience
+          : currentQuestion == 3
+              ? selectedGoal
+              : selectedTrainingDays,
   onChanged: (value) {
     setState(() {
       if (currentQuestion == 1) {
-  selectedEquipment = value;
-} else if (currentQuestion == 2) {
-  selectedExperience = value;
-} else {
-  selectedGoal = value;
-}
+        selectedEquipment = value;
+      } else if (currentQuestion == 2) {
+        selectedExperience = value;
+      } else if (currentQuestion == 3) {
+        selectedGoal = value;
+      } else {
+        selectedTrainingDays = value;
+      }
     });
-    }
-      ),
+  },
+),
+
 
    RadioListTile<String>(
   title: Text(
@@ -378,198 +391,154 @@ class _HomeSetupScreenState extends State<HomeSetupScreen> {
         ? 'Resistance Bands'
         : currentQuestion == 2
             ? 'Intermediate'
-            : 'Get Stronger',
+            : currentQuestion == 3
+                ? 'Get Stronger'
+                : '4 Days',
   ),
   value: currentQuestion == 1
       ? 'Resistance Bands'
       : currentQuestion == 2
           ? 'Intermediate'
-          : 'Get Stronger',
+          : currentQuestion == 3
+              ? 'Get Stronger'
+              : '4 Days',
   groupValue: currentQuestion == 1
       ? selectedEquipment
       : currentQuestion == 2
           ? selectedExperience
-          : selectedGoal,
+          : currentQuestion == 3
+              ? selectedGoal
+              : selectedTrainingDays,
   onChanged: (value) {
     setState(() {
       if (currentQuestion == 1) {
         selectedEquipment = value;
       } else if (currentQuestion == 2) {
         selectedExperience = value;
-      } else {
+      } else if (currentQuestion == 3) {
         selectedGoal = value;
+      } else {
+        selectedTrainingDays = value;
       }
     });
   },
 ),
+
+
 RadioListTile<String>(
   title: Text(
     currentQuestion == 1
         ? 'Weights & Machines'
         : currentQuestion == 2
             ? 'Advanced'
-            : 'General Fitness',
+            : currentQuestion == 3
+                ? 'General Fitness'
+                : '5–6 Days',
   ),
   value: currentQuestion == 1
       ? 'Weights & Machines'
       : currentQuestion == 2
           ? 'Advanced'
-          : 'General Fitness',
+          : currentQuestion == 3
+              ? 'General Fitness'
+              : '5–6 Days',
   groupValue: currentQuestion == 1
       ? selectedEquipment
       : currentQuestion == 2
           ? selectedExperience
-          : selectedGoal,
+          : currentQuestion == 3
+              ? selectedGoal
+              : selectedTrainingDays,
   onChanged: (value) {
     setState(() {
       if (currentQuestion == 1) {
         selectedEquipment = value;
       } else if (currentQuestion == 2) {
         selectedExperience = value;
-      } else {
+      } else if (currentQuestion == 3) {
         selectedGoal = value;
+      } else {
+        selectedTrainingDays = value;
       }
     });
   },
 ),
+
 const SizedBox(height: 30),
 
 ElevatedButton(
-  
   onPressed: () {
-  if (currentQuestion == 1 && selectedEquipment == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Please select your equipment before continuing.'),
-      ),
-    );
-    return;
-  }
+    if (currentQuestion == 1 && selectedEquipment == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Please select your equipment before continuing.',
+          ),
+        ),
+      );
+      return;
+    }
 
-  if (currentQuestion == 2 && selectedExperience == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Please select your experience level before continuing.'),
-      ),
-    );
-    return;
-  }
-if (currentQuestion == 3 && selectedGoal == null) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(
-      content: Text('Please select your training goal before continuing.'),
-    ),
-  );
-  return;
-}
+    if (currentQuestion == 2 && selectedExperience == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Please select your experience level before continuing.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    if (currentQuestion == 3 && selectedGoal == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Please select your training goal before continuing.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    if (currentQuestion == 4 && selectedTrainingDays == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Please select your training days before continuing.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    if (currentQuestion < 4) {
   setState(() {
     currentQuestion++;
   });
-},
-  child: const Text('Continue'),
+} else {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ProgramResultsScreen(
+  equipment: selectedEquipment,
+  experience: selectedExperience,
+  goal: selectedGoal,
+  trainingDays: selectedTrainingDays,
 ),
-    ],
-  ),
-),
-    );
-  }
-}  
-
-      
-Widget _buildStatCard(
-  String title,
-  String value,
-  IconData icon,
-) {
-
-  return Container(
-    padding: const EdgeInsets.all(20),
-
-    decoration: BoxDecoration(
-      color: Colors.grey[900],
-      borderRadius: BorderRadius.circular(20),
-    ),
-
-    child: Column(
-      children: [
-
-        Icon(icon, size: 40),
-
-        const SizedBox(height: 10),
-
-        Text(
-          title,
-          style: const TextStyle(fontSize: 18),
-        ),
-
-        const SizedBox(height: 10),
-
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
     ),
   );
 }
-
-Widget _buildAnalyticsCard(
-  String title,
-  String value,
-  IconData icon,
-) {
-
-  return Container(
-    width: double.infinity,
-    padding: const EdgeInsets.all(20),
-
-    decoration: BoxDecoration(
-      color: Colors.grey[900],
-      borderRadius: BorderRadius.circular(20),
-    ),
-
-    child: Row(
-      children: [
-
-        Icon(
-          icon,
-          size: 40,
-          color: Colors.greenAccent,
-        ),
-
-        const SizedBox(width: 20),
-
-        Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
-
-          children: [
-
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18,
-                color: Colors.grey,
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
+  },
+  child: Text(
+  currentQuestion == 4 ? 'Create Program' : 'Continue',
+),
+),
       ],
     ),
-  );
+  ),
+);
+  }
 }
 
 class WorkoutScreen extends StatelessWidget {
@@ -2145,6 +2114,115 @@ class SettingsScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+Widget _buildStatCard(
+  String title,
+  String value,
+  IconData icon,
+) {
+  return Container(
+    padding: const EdgeInsets.all(20),
+    decoration: BoxDecoration(
+      color: Colors.grey[900],
+      borderRadius: BorderRadius.circular(20),
+    ),
+    child: Column(
+      children: [
+        Icon(icon, size: 40),
+        const SizedBox(height: 10),
+        Text(
+          title,
+          style: const TextStyle(fontSize: 18),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildAnalyticsCard(
+  String title,
+  String value,
+  IconData icon,
+) {
+  return Container(
+    width: double.infinity,
+    padding: const EdgeInsets.all(20),
+    decoration: BoxDecoration(
+      color: Colors.grey[900],
+      borderRadius: BorderRadius.circular(20),
+    ),
+    child: Row(
+      children: [
+        Icon(
+          icon,
+          size: 40,
+          color: Colors.greenAccent,
+        ),
+        const SizedBox(width: 20),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
+class ProgramResultsScreen extends StatelessWidget {
+  final String? equipment;
+  final String? experience;
+  final String? goal;
+  final String? trainingDays;
+
+  const ProgramResultsScreen({
+    super.key,
+    this.equipment,
+    this.experience,
+    this.goal,
+    this.trainingDays,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Your Program'),
+      ),
+      body: Center(
+  child: Text(
+    'Equipment: $equipment',
+    textAlign: TextAlign.center,
+    style: const TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+),
     );
   }
 }
