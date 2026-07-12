@@ -5,6 +5,7 @@ import 'screens/program_results_screen.dart' as screens;
 import 'screens/home_setup_screen.dart' as home_setup;
 import 'widgets/dashboard_cards.dart' as dashboard_cards;
 import 'screens/settings_screen.dart' as settings;
+import 'screens/nutrition_screen.dart' as nutrition;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const WorkoutScreen(),
-    const NutritionScreen(),
+    const nutrition.NutritionScreen(),
     const ProgressScreen(),
     const CalculatorScreen(),
     const settings.SettingsScreen(),
@@ -1031,21 +1032,7 @@ loggedSets.add(
   }
 }
 
-class NutritionScreen extends StatelessWidget {
-  const NutritionScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-          'Nutrition Tracker',
-          style: TextStyle(fontSize: 28),
-        ),
-      ),
-    );
-  }
-}
 class ProgressScreen extends StatefulWidget {
   const ProgressScreen({super.key});
 
