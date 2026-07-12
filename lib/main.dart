@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'screens/program_results_screen.dart' as screens;
 import 'screens/home_setup_screen.dart' as home_setup;
+import 'widgets/dashboard_cards.dart' as dashboard_cards;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -243,7 +244,7 @@ class HomeScreen extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: _buildStatCard(
+                  child: dashboard_cards.buildStatCard(
                     'Protein',
                     '165g',
                     Icons.fitness_center,
@@ -251,7 +252,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(width: 15),
                 Expanded(
-                  child: _buildStatCard(
+                  child: dashboard_cards.buildStatCard(
                     'Water',
                     '3.2L',
                     Icons.water_drop,
@@ -1141,7 +1142,7 @@ class _ProgressScreenState
 
           children: [
 
-            _buildAnalyticsCard(
+            dashboard_cards.buildAnalyticsCard(
               'Total Sets Logged',
               '$totalSets',
               Icons.format_list_numbered,
@@ -1149,7 +1150,7 @@ class _ProgressScreenState
 
             const SizedBox(height: 20),
 
-            _buildAnalyticsCard(
+            dashboard_cards.buildAnalyticsCard(
               'Highest Personal Record',
               '$highestPR lbs',
               Icons.emoji_events,
@@ -1157,7 +1158,7 @@ class _ProgressScreenState
 
             const SizedBox(height: 20),
 
-            _buildAnalyticsCard(
+            dashboard_cards.buildAnalyticsCard(
               'Total Workout Volume',
               '$totalVolume lbs',
               Icons.bar_chart,
@@ -1872,80 +1873,7 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 }
-Widget _buildStatCard(
-  String title,
-  String value,
-  IconData icon,
-) {
-  return Container(
-    padding: const EdgeInsets.all(20),
-    decoration: BoxDecoration(
-      color: Colors.grey[900],
-      borderRadius: BorderRadius.circular(20),
-    ),
-    child: Column(
-      children: [
-        Icon(icon, size: 40),
-        const SizedBox(height: 10),
-        Text(
-          title,
-          style: const TextStyle(fontSize: 18),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    ),
-  );
-}
 
-Widget _buildAnalyticsCard(
-  String title,
-  String value,
-  IconData icon,
-) {
-  return Container(
-    width: double.infinity,
-    padding: const EdgeInsets.all(20),
-    decoration: BoxDecoration(
-      color: Colors.grey[900],
-      borderRadius: BorderRadius.circular(20),
-    ),
-    child: Row(
-      children: [
-        Icon(
-          icon,
-          size: 40,
-          color: Colors.greenAccent,
-        ),
-        const SizedBox(width: 20),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18,
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
-}
+
+
 
