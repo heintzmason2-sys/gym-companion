@@ -4,6 +4,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'screens/program_results_screen.dart' as screens;
 import 'screens/home_setup_screen.dart' as home_setup;
 import 'widgets/dashboard_cards.dart' as dashboard_cards;
+import 'screens/settings_screen.dart' as settings;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -44,7 +46,7 @@ class _MainScreenState extends State<MainScreen> {
     const NutritionScreen(),
     const ProgressScreen(),
     const CalculatorScreen(),
-    const SettingsScreen(),
+    const settings.SettingsScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -1856,24 +1858,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     );
   }
 }
-class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-          'Settings',
-          style: TextStyle(
-            fontSize: 28,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 
 
 
