@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'screens/program_results_screen.dart' as screens;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -520,7 +521,7 @@ ElevatedButton(
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => ProgramResultsScreen(
+      builder: (context) => screens.ProgramResultsScreen(
   equipment: selectedEquipment,
   experience: selectedExperience,
   goal: selectedGoal,
@@ -2193,36 +2194,4 @@ Widget _buildAnalyticsCard(
     ),
   );
 }
-class ProgramResultsScreen extends StatelessWidget {
-  final String? equipment;
-  final String? experience;
-  final String? goal;
-  final String? trainingDays;
 
-  const ProgramResultsScreen({
-    super.key,
-    this.equipment,
-    this.experience,
-    this.goal,
-    this.trainingDays,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Your Program'),
-      ),
-      body: Center(
-  child: Text(
-    'Equipment: $equipment',
-    textAlign: TextAlign.center,
-    style: const TextStyle(
-      fontSize: 24,
-      fontWeight: FontWeight.bold,
-    ),
-  ),
-),
-    );
-  }
-}
